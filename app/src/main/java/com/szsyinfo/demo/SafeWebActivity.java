@@ -1,7 +1,10 @@
 package com.szsyinfo.demo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.webkit.ConsoleMessage;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -27,7 +31,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.szsyinfo.demo.model.ActivityCode;
 import com.szsyinfo.demo.utilcode.util.AppUtils;
+import com.szsyinfo.demo.utilcode.util.ToastUtils;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class SafeWebActivity extends AppCompatActivity {
 
@@ -35,7 +44,7 @@ public class SafeWebActivity extends AppCompatActivity {
     private SafeWebView mWebView;
     private LinearLayout mRoot;
     private ProgressBar progressBar;
-    private boolean  loadError =false;//默认没有错误
+    private boolean loadError = false;//默认没有错误
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +53,53 @@ public class SafeWebActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //先判断是哪个页面返回过来的
+        switch (requestCode) {
+            case 1:
+                String stringExtra = data.getStringExtra("ScanData");
+                ToastUtils.showShort(stringExtra);
+
+                JSInterface ("ResultScan",stringExtra);
+
+                break;
+            case 2:
+                //同上……
+                break;
+        }
+    }
+
+    /**调了网页Js*/
+    private void  JSInterface (String method,String val)
+    {
+
+        // Android版本变量
+        final int version = Build.VERSION.SDK_INT;
+        // 因为该方法在 Android 4.4 版本才可使用，所以使用时需进行版本判断
+        if (version < 18) {
+            mWebView.loadUrl("javascript:"+method+"('"+val+"')");
+        } else {
+
+            mWebView.evaluateJavascript("javascript:"+method+"('"+val+"')", new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    //此处为 js 返回的结果
+
+                }
+            });
+        }
+
+    }
+
 
     private void initView() {
         mRoot = (LinearLayout) findViewById(R.id.activity_safe_web);
 
         //进度条
-        progressBar= (ProgressBar)findViewById(R.id.progressbar);//进度条
+        progressBar = (ProgressBar) findViewById(R.id.progressbar);//进度条
 
         //实际使用时请采用 new 的方式
         mWebView = (SafeWebView) findViewById(R.id.safe_webview);
@@ -156,7 +206,7 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Log.v("IE","onPageStarted");
+            Log.v("IE", "onPageStarted");
             progressBar.setVisibility(View.VISIBLE);
             super.onPageStarted(view, url, favicon);
         }
@@ -170,9 +220,9 @@ public class SafeWebActivity extends AppCompatActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             progressBar.setVisibility(View.GONE);
-            Log.v("IE","onPageFinished");
-             if (loadError){ //加载失败的话，初始化页面加载失败的图，然后替换正在加载的视图页面
-                 mWebView.loadUrl("file:///android_asset/web/index.html");
+            Log.v("IE", "onPageFinished");
+            if (loadError) { //加载失败的话，初始化页面加载失败的图，然后替换正在加载的视图页面
+                mWebView.loadUrl("file:///android_asset/web/index.html");
             }
             super.onPageFinished(view, url);
         }
@@ -185,7 +235,7 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public void onLoadResource(WebView view, String url) {
-            Log.v("IE","onLoadResource");
+            Log.v("IE", "onLoadResource");
             super.onLoadResource(view, url);
         }
 
@@ -198,8 +248,8 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            Log.v("IE","shouldInterceptRequest");
-            Log.v("IE",request.getUrl().toString().trim());
+            Log.v("IE", "shouldInterceptRequest");
+            Log.v("IE", request.getUrl().toString().trim());
             return super.shouldInterceptRequest(view, request);
         }
 
@@ -212,7 +262,7 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            Log.v("IE","onReceivedError");
+            Log.v("IE", "onReceivedError");
             super.onReceivedError(view, request, error);
             loadError = true;
         }
@@ -226,7 +276,7 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            Log.v("IE","onReceivedSslError");
+            Log.v("IE", "onReceivedSslError");
             super.onReceivedSslError(view, handler, error);
         }
     }
@@ -235,7 +285,7 @@ public class SafeWebActivity extends AppCompatActivity {
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            Log.v("IE","onConsoleMessage");
+            Log.v("IE", "onConsoleMessage");
             return super.onConsoleMessage(consoleMessage);
         }
 
@@ -247,13 +297,17 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            Log.v("IE","onProgressChanged");
+            Log.v("IE", "onProgressChanged");
             progressBar.setProgress(newProgress);
             super.onProgressChanged(view, newProgress);
         }
 
         /**
          * Js 中调用 alert() 函数，产生的对话框
+         * 由于设置了弹窗检验调用结果,所以需要支持js对话框
+         * webview只是载体，内容的渲染需要使用webviewChromClient类去实现
+         * 通过设置WebChromeClient对象处理JavaScript的对话框
+         * 设置响应js 的Alert()函数
          *
          * @param view
          * @param url
@@ -263,6 +317,20 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+
+            /*
+            AlertDialog.Builder b = new AlertDialog.Builder(SafeWebActivity.this);
+            b.setTitle("提示");
+            b.setMessage(message);
+            b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            b.setCancelable(false);
+            b.create().show();
+            */
             return super.onJsAlert(view, url, message, result);
         }
 
@@ -292,6 +360,37 @@ public class SafeWebActivity extends AppCompatActivity {
          */
         @Override
         public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+
+            /*
+
+            // 根据协议的参数，判断是否是所需要的url(原理同方式2)
+            // 一般根据scheme（协议格式） & authority（协议名）判断（前两个参数）
+            //假定传入进来的 url = "js://webview?arg1=111&arg2=222"（同时也是约定好的需要拦截的）
+
+            Uri uri = Uri.parse(message);
+            // 如果url的协议 = 预先约定的 js 协议
+            // 就解析往下解析参数
+            if ( uri.getScheme().equals("js")) {
+
+                // 如果 authority  = 预先约定协议里的 webview，即代表都符合约定的协议
+                // 所以拦截url,下面JS开始调用Android需要的方法
+                if (uri.getAuthority().equals("webview")) {
+
+
+                    // 执行JS所需要调用的逻辑
+                    System.out.println("js调用了Android的方法");
+                    // 可以在协议上带有参数并传递到Android上
+                    HashMap<String, String> params = new HashMap<>();
+                    Set<String> collection = uri.getQueryParameterNames();
+
+                    //参数result:代表消息框的返回值(输入值)
+                    result.confirm("js调用了Android的方法成功啦");
+                }
+                return true;
+            }
+
+            */
+
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
 
@@ -304,7 +403,7 @@ public class SafeWebActivity extends AppCompatActivity {
         @Override
         public void onReceivedIcon(WebView view, Bitmap icon) {
 
-            Log.v("IE","onReceivedIcon");
+            Log.v("IE", "onReceivedIcon");
             super.onReceivedIcon(view, icon);
         }
 
@@ -318,10 +417,10 @@ public class SafeWebActivity extends AppCompatActivity {
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
 
-            Log.v("IE","onReceivedTitle");
+            Log.v("IE", "onReceivedTitle");
 
             //判断标题 title 中是否包含有“error”字段，如果包含“error”字段，则设置加载失败，显示加载失败的视图
-            if(!TextUtils.isEmpty(title)&&title.toLowerCase().contains("找不到网页")){
+            if (!TextUtils.isEmpty(title) && title.toLowerCase().contains("找不到网页")) {
                 loadError = true;
             }
         }
@@ -331,7 +430,7 @@ public class SafeWebActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        Log.v("IE","onResume");
+        Log.v("IE", "onResume");
 
         super.onResume();
         mWebView.onResume();

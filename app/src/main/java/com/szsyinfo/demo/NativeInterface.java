@@ -1,11 +1,15 @@
 package com.szsyinfo.demo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
+import com.szsyinfo.demo.model.ActivityCode;
+
 import static com.szsyinfo.demo.utilcode.util.ActivityUtils.startActivity;
+import static com.szsyinfo.demo.utilcode.util.ActivityUtils.startActivityForResult;
 
 
 public class NativeInterface {
@@ -40,10 +44,13 @@ public class NativeInterface {
     @JavascriptInterface
     public void OpenScan() {
 
+        //startActivity(new Intent(mContext,SubScanActivity.class));
 
+        //跳转到ActivityA页面
+        Intent intent = new Intent(mContext, SubScanActivity.class);
 
-        startActivity(new Intent(mContext,SubScanActivity.class));
-
+        //发送请求代码
+        startActivityForResult((Activity)mContext,intent,ActivityCode.SCan.getCode());
     }
 
 }

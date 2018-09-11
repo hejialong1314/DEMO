@@ -44,4 +44,8 @@ dependencies {
     //implementation 'org.wlf:FileDownloader:0.3.2'
     implementation 'com.google.zxing:core:3.3.3'
     implementation 'org.greenrobot:greendao:3.2.2' // add library
+
+    //以下快速绑定控件
+    //implementation 'com.jakewharton:butterknife:8.8.1'
+    //annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

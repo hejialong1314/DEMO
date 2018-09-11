@@ -122,7 +122,7 @@ public abstract class QRCodeView extends RelativeLayout implements Camera.Previe
     public void startCamera(int cameraFacing) {
         if (mCamera != null) {
             return;
-        }
+    }
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int cameraId = 0; cameraId < Camera.getNumberOfCameras(); cameraId++) {
             Camera.getCameraInfo(cameraId, cameraInfo);

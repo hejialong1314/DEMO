@@ -8,19 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
+import com.szsyinfo.demo.bgaqrcode.core.BarcodeType;
+import com.szsyinfo.demo.bgaqrcode.core.QRCodeView;
+import com.szsyinfo.demo.bgaqrcode.zxing.ZXingView;
+import com.szsyinfo.demo.model.ActivityCode;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+
 //import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
-import com.szsyinfo.demo.bgaqrcode.core.BarcodeType;
-import com.szsyinfo.demo.bgaqrcode.core.QRCodeView;
-import com.szsyinfo.demo.bgaqrcode.zxing.ZXingView;
 
 public class SubScanActivity extends AppCompatActivity implements QRCodeView.Delegate {
     private static final String TAG = SubScanActivity.class.getSimpleName();
@@ -36,6 +39,7 @@ public class SubScanActivity extends AppCompatActivity implements QRCodeView.Del
         mZXingView = findViewById(R.id.zxingview);
         mZXingView.setDelegate(this);
     }
+
 
     @Override
     protected void onStart() {
@@ -67,9 +71,16 @@ public class SubScanActivity extends AppCompatActivity implements QRCodeView.Del
     @Override
     public void onScanQRCodeSuccess(String result) {
         Log.i(TAG, "result:" + result);
+
+        //------------------------------
+        Intent intent=new Intent();
+        intent.putExtra("ScanData", result);
+        setResult(ActivityCode.SCan.getCode(),intent);
+        finish();
+        //-----------------------------
+
         setTitle("扫描结果为：" + result);
         vibrate();
-
         mZXingView.startSpot(); // 延迟0.5秒后开始识别
     }
 
@@ -78,7 +89,7 @@ public class SubScanActivity extends AppCompatActivity implements QRCodeView.Del
         Log.e(TAG, "打开相机出错");
     }
 
-    public void onClick(View v) {
+      public void onClick(View v) {
         switch (v.getId()) {
             case R.id.start_preview:
                 mZXingView.startCamera(); // 打开后置摄像头开始预览，但是并未开始识别
