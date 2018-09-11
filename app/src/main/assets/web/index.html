@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>示例</title>
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+        <meta content="yes" name="apple-mobile-web-app-capable"/>
+        <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+        <meta content="telephone=no" name="format-detection"/>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/scrollTab.js"></script>
+        <script type="text/javascript" src="js/slider.js"></script>
+        <script type="text/javascript">
+            function callHello(){
+                AndroidNative.hello();
+            }
+            function callHello1(){
+                AndroidNative.hello('hello Android');
+            }
+            function callAndroid(){
+                var temp = AndroidNative.getAndroid();
+                console.log(temp);
+                alert(temp);
+            }
+            function callAndroidTime(){
+                var temp = AndroidNative.getAndroidTime();
+                var jsendtTime = (new Date()).valueOf();
+                var pageTime = jsendtTime - temp;
+                console.log("temp:" +temp);
+                console.log("jsendtTime:" +jsendtTime);
+                console.log("pageTime:" +pageTime);
+            }
+        </script>
+    </head>
+    <body>        
+        <section class="aui-flexView">
+            <header class="aui-navBar aui-navBar-fixed">               
+                <div class="aui-center">
+                    <span class="aui-center-title">示例v1.1</span>
+                </div>               
+            </header>
+            <section class="aui-scrollView">
+                <div class="m-scrolltab" data-ydui-scrolltab>
+                    <div class="scrolltab-nav">
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">扫描</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">图片</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">拍照</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">上传</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">下载</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">支付宝</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">微信支付</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">设置</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">调用原生</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">...</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">...</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">...</div>
+                        </a>
+                        <a href="javascript:;" class="scrolltab-item">
+                            <div class="scrolltab-title">...</div>
+                        </a>
+                    </div>
+                    <div class="scrolltab-content">
+                        <div class="scrolltab-content-item">                            
+
+                            <h2>扫描</h2>
+                            <div>                               
+                                 <div class="aui-flex-links" >
+
+                                     AndroidNative.OpenScan()
+
+                                     <button onclick="AndroidNative.OpenScan()">调起扫码 返回 String </button>
+
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>图片</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>拍照</h2>
+
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>上传</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>下载</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>支付宝</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>微信支付</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>设置</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>高德地图</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>                                
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>调用原生</h2>
+                            <div>
+                                <div class="aui-flex-links">
+                                    <ul class="entry">
+                                        <li>
+                                            Toast 提示<br/>
+                                            代码：<br/>
+                                            <div>
+                                                AndroidNative.hello();
+                                            </div>
+                                            <button onclick="callHello()">测试调用 Native hello()</button>
+                                        </li>
+
+                                        <br/>
+                                        <li>
+                                            Toast 提示,包含参数<br/>
+                                            代码：<br/>
+                                            <div>
+                                                AndroidNative.hello('hello Android');
+                                            </div>
+                                            <button onclick="callHello1()">测试调用 Native hello("hello")</button>
+                                        </li>
+                                        <br/>
+                                        <li>
+                                            获取 Android 返回值<br/>
+                                            代码：<br/>
+                                            <div>
+                                                AndroidNative.getAndroid();
+                                            </div>
+                                            <button onclick="callAndroid()">测试调用 getAndroid() 返回 String </button>
+                                        </li>
+                                        <li>
+                                            Android Js 方法调用时间差<br/>
+                                            代码：<br/>
+                                            <div>
+                                                AndroidNative.getAndroidTime();
+                                            </div>
+                                            <button onclick="callAndroidTime()">测试调用 getAndroidTime() 返回 String </button>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>...</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>
+
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>...</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>
+
+                            </div>
+                        </div>
+                        <div class="scrolltab-content-item">
+                            <h2>...</h2>
+                            <div>
+                                <div class="aui-flex-links"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </body>
+</html>

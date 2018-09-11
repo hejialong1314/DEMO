@@ -1,0 +1,18 @@
+
+https://github.com/bingoogolapple/BGAFlowLayout-Android
+
+Android流式布局，可配置是否将每一行的空白区域平均分配给子控件
+
+最开始是参考鸿洋_的这篇文章的思路实现的，后来根据产品经理出的需求，增加了将每一行的空白区域平均分配给子控件。
+
+demo中分别演示了在xml使用方式和在java代码中动态添加
+
+
+<declare-styleable name="BGAFlowLayout">
+    <!-- 标签之间的水平间距 -->
+    <attr name="fl_horizontalChildGap" format="dimension" />
+    <!-- 标签之间的垂直间距 -->
+    <attr name="fl_verticalChildGap" format="dimension" />
+    <!-- 是否平均分配每一行的剩余水平方向的空白区域给该行的标签 -->
+    <attr name="fl_isDistributionWhiteSpacing" format="boolean" />
+</declare-styleable>
